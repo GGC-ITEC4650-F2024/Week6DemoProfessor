@@ -19,9 +19,6 @@ public class PlayerController : MonoBehaviour
     public int maxJumps;
     private int jumpsLeft;
 
-    private GameObject[] allHearts;
-    private int heartCount;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +30,6 @@ public class PlayerController : MonoBehaviour
         invMgr = GameObject.Find("Inventory").GetComponent<InventoryManager>();
 
         jumpsLeft = 10;
-
-        allHearts = GameObject.FindGameObjectsWithTag("Heart");
-        heartCount = allHearts.Length;
-        print("Game starts with " + heartCount + " hearts");
     }
 
     // Update is called once per frame
@@ -73,6 +66,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        if(other.enabled == false) {return;} //disable double pickup
+
         GameObject otherGO = other.gameObject;
         if(otherGO.name == "Ground") {
             jumpsLeft = maxJumps;
@@ -80,9 +75,6 @@ public class PlayerController : MonoBehaviour
         else if(otherGO.tag == "PickUpAble") {
             PickUpController puCon = otherGO.GetComponent<PickUpController>();
             puCon.pickUp();
-            //heartCon.hide();
-            //health += heartCon.healthVal;
-            //invMgr.buildIcon(otherGO);
         }
     }
 }
